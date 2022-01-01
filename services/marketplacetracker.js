@@ -23,21 +23,22 @@ const marketplaceSc = loadMarketplaceContract()
 
 const apiEndPoint = process.env.API_ENDPOINT
 const callAPI = async (endpoint, data) => {
-  try {
-    await axios({
-      method: 'post',
-      url: apiEndPoint + endpoint,
-      data,
-    })
-  } catch(err) {
-    // If bad request save event-data to dead letter queue
-    if (err && err.response && err.response.status === 400) {
-      console.warn(`[bad-request] add event to dead-letter-queue, txHash: ${data.transactionHash}`);
-      await EventDeadLetterQueue.create({contract: process.env.CONTRACTADDRESS, event: data})
-      return;
+  let times = 0;
+  while(times < 100) {
+    try {
+      let ret = await axios({
+        method: 'post',
+        url: apiEndPoint + endpoint,
+        data,
+      });
+      return ret;
+    } catch (err) {
+      console.error('[callAPI error] failed for: ', {data});
+      console.error(err.message);
+      console.log(`retry after ${5*times} seconds.`)
+      await sleep(5000*times);
+      times++;
     }
-    // If other reasons (server unreachable for example) throw and block;
-    throw err;
   }
 }
 
