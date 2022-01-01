@@ -20,8 +20,9 @@
     "ethers": "^5.1.3",
     "express": "^4.17.1",
     "fs": "^0.0.1-security",
-    "prettier": "^2.2.1",
+    "ko-sleep": "^1.1.4",
+    "mongoose": "^5.12.1",
     "nodemon": "^2.0.12",
-    "mongoose": "^5.12.1"
+    "prettier": "^2.2.1"
   }
 }
