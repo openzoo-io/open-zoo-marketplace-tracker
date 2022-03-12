@@ -24,7 +24,7 @@ const connect = () => {
 
     const trackContractCallback = async () => {
       const lastBlockRecord = await TrackerState.find({ contractAddress: process.env.CONTRACTADDRESS });
-      await processMarketplaceEvents(lastBlockRecord[0].lastBlockProcessed - 1000);
+      await processMarketplaceEvents(lastBlockRecord[0].lastBlockProcessed);
       setTimeout(() => trackContractCallback(), 5000);
     }
     await trackContractCallback();
